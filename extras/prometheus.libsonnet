@@ -12,7 +12,7 @@ local k = import 'ksonnet/ksonnet.beta.3/k.libsonnet';
     },
   },
   prometheus+:: {
-    [if $._config.prometheus.rules != null && $._config.prometheus.rules != {} then "rules"]:
+    [if $._config.prometheus.rules != null && $._config.prometheus.rules != {} then 'rules']:
       {
         apiVersion: 'monitoring.coreos.com/v1',
         kind: 'PrometheusRule',
@@ -28,5 +28,5 @@ local k = import 'ksonnet/ksonnet.beta.3/k.libsonnet';
           groups: $._config.prometheus.rules.groups,
         },
       },
-    }  
+  },
 }

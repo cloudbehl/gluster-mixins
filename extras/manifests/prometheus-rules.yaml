@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: prometheus-k8s-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: gluster-volume.rules
+    rules:
+    - expr: |
+        sum(max(gluster_subvol_capacity_used_bytes{job="gluster-exporter"}) BY (volume, subvolume)) BY (volume)
+      record: gluster:volume_capacity_used_bytes_total:sum

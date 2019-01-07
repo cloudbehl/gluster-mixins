@@ -1,0 +1,14 @@
+ARG from
+FROM ${from}
+
+ARG builddate="(unknown)"
+ARG version="(unknown)"
+
+LABEL build-date="${builddate}"
+LABEL io.k8s.description="Mixins will deploy Grafana dashboards and Prometheus alerts for Gluster."
+LABEL name="mixins"
+LABEL Summary="Mixins will deploy Grafana dashboards and Prometheus alerts for Gluster."
+LABEL vcs-type="git"
+LABEL vcs-url="https://github.com/gluster/mixins"
+LABEL vendor="gluster.org"
+LABEL version="${version}"

@@ -25,11 +25,8 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
 COPY . /gluster/gluster-mixins/
 WORKDIR /gluster/gluster-mixins/
 
-#run test and generate the intermidiate files
-RUN make test \ 
-    prometheus_alerts.yaml \
-    prometheus_rules.yaml \
-    dashboards_out
+#make will run tests and generate the intermidiate files
+RUN make 
 
 WORKDIR /gluster/gluster-mixins/extras
 #installing required dependency from jsonnetfile.json and building k8s objects

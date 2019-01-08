@@ -2,11 +2,13 @@ FROM docker.io/openshift/origin-release:golang-1.10
 
 #install clang and gcc-c++ required for jsonnet to build
 RUN yum install -y clang \
-    gcc-c++
+    gcc-c++ \
+    make
 
 #get required go packages for building k8s objects
 RUN go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb \
-    github.com/brancz/gojsontoyaml
+    github.com/brancz/gojsontoyaml \
+    github.com/prometheus/prometheus/cmd/promtool
 
 #building jsonnet
 RUN git clone https://github.com/google/jsonnet && \
@@ -19,10 +21,17 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
     chmod +x ./kubectl && \
     mv ./kubectl /usr/local/bin
 
-#cloning the gluster-mixins project and making extras as working dir
-RUN git clone https://github.com/gluster/gluster-mixins /gluster/gluster-mixins;
-WORKDIR /gluster/gluster-mixins/extras
+#cloning the gluster-mixins project and making gluster-mixins as working dir
+COPY . /gluster/gluster-mixins/
+WORKDIR /gluster/gluster-mixins/
 
+#run test and generate the intermidiate files
+RUN make test \ 
+    prometheus_alerts.yaml \
+    prometheus_rules.yaml \
+    dashboards_out
+
+WORKDIR /gluster/gluster-mixins/extras
 #installing required dependency from jsonnetfile.json and building k8s objects
 RUN jb install
 RUN ./build.sh example.jsonnet
